@@ -33,25 +33,23 @@ public class Autocheckout {
 
         catch (NoAlertPresentException e) {}
 
-
-
         Actions action = new Actions(driver);
         action.sendKeys(Keys.SPACE).perform();
 
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
 
         //get shoe size
+        WebElement item;
         if(!itemInfo.shoeSize.isEmpty()) {
-            WebElement item = driver.findElement(By.className("sizes___3Stmf")).findElement(By.xpath("//button[@class='gl-label size___TqqSo']")).findElement(
+            item = driver.findElement(By.className("sizes___3Stmf")).findElement(By.xpath("//button[@class='gl-label size___TqqSo']")).findElement(
                     By.xpath("//span[text()='" + itemInfo.shoeSize + "']"));
-            item.click();
         }
 
         else {
-            WebElement item = driver.findElement(By.className("sizes___3Stmf")).findElement(By.xpath("//button[@class='gl-label size___TqqSo']")).findElement(
+            item = driver.findElement(By.className("sizes___3Stmf")).findElement(By.xpath("//button[@class='gl-label size___TqqSo']")).findElement(
                     By.xpath("//span[text()='" + itemInfo.clothingSize + "']"));
-            item.click();
         }
+        item.click();
 
 //        JavascriptExecutor jse = (JavascriptExecutor)driver;
 
