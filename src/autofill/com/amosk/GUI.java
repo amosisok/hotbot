@@ -1,20 +1,15 @@
 package autofill.com.amosk;
 
-import com.google.common.io.Resources;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class GUI implements ActionListener {
     GuiElements guiElements = new GuiElements();
-    JFrame frame = new JFrame("Autocheckout (Developed by Amos Ko)");
+    JFrame frame = new JFrame("Hot Bot (Developed by Amos Ko)");
     JPanel mainPanel = new JPanel();
     JPanel homePage = new JPanel();
     JPanel itemDetails;
@@ -42,28 +37,25 @@ public class GUI implements ActionListener {
         mainPanel.add(optionsPanel, "options");
 
         ClassLoader classLoader = getClass().getClassLoader();
-        JLabel mainImage = guiElements.addImage(Objects.requireNonNull(classLoader.getResource("bot.jpg")).getFile());
-//        gbc.gridx = 1;
+//        JLabel mainImage = guiElements.addImage(Objects.requireNonNull(classLoader.getResource("bot.jpg")).getFile());
+        JLabel mainImage = guiElements.addImage(Objects.requireNonNull(classLoader.getResource("hotbot.jpg")).getFile());
         gbc.gridy = 0;
         homePage.add(mainImage, gbc);
 
-        JLabel title = new JLabel("Autocheckout Bot");
-//        gbc.gridx = 1;
+        JLabel title = new JLabel("Hot Bot");
         gbc.gridy = 1;
         title.setFont(new Font("Helvetica Neue", Font.PLAIN, 25));
         homePage.add(title, gbc);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         JButton newProfileButton = new JButton("Create new profile");
-//        gbc.gridx = 0;
         gbc.gridy = 2;
         homePage.add(newProfileButton, gbc);
 
         newProfileButton.addActionListener(actionEvent -> {
             cardLayout.show(mainPanel, "newProfile");
         });
-//
-//        gbc.gridx = 1;
+
         gbc.gridy = 3;
         JButton existingProfileButton = new JButton("Use existing profile");
         homePage.add(existingProfileButton, gbc);
@@ -75,19 +67,11 @@ public class GUI implements ActionListener {
         });
 
         JButton optionsButton = new JButton("Options");
-//        gbc.gridx = 2;
         gbc.gridy = 4;
         homePage.add(optionsButton, gbc);
         optionsButton.addActionListener(actionEvent -> {
             cardLayout.show(mainPanel, "options");
         });
-
-//        try {
-//            frame.setIconImage(ImageIO.read(new File(Objects.requireNonNull(classLoader.getResource("bot.jpg")).getFile())));
-//        }
-//        catch (IOException exc) {
-//            exc.printStackTrace();
-//        }
 
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -176,7 +160,6 @@ public class GUI implements ActionListener {
             cardLayout.show(mainPanel, "homePage");
         });
         gbc.gridx = 1;
-//        gbc.gridy = 0;
         existingProfile.add(backButton, gbc);
 
         int gridYValue = 1;
@@ -205,7 +188,7 @@ public class GUI implements ActionListener {
         gbc.insets= new Insets(10,10,10,10);
 
         int gridYValue = 0;
-        for(JLabel label : guiElements.getItemDetailJLabels()) {
+        for(JLabel label : guiElements.getItemDetailLabels()) {
             gridYValue++;
             gbc.gridx = 0;
             gbc.gridy = gridYValue;

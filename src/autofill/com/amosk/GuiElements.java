@@ -2,6 +2,7 @@ package autofill.com.amosk;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class GuiElements {
     ArrayList<JLabel> newProfileLabels = new ArrayList<>();
 
     ArrayList<JTextField> itemDetailTextFields = new ArrayList<>();
-    ArrayList<JLabel> itemDetailJLabels = new ArrayList<>();
+    ArrayList<JLabel> itemDetailLabels = new ArrayList<>();
 
     JTextField profileName = new JTextField(20);
     JTextField firstName = new JTextField(20);
@@ -57,6 +58,8 @@ public class GuiElements {
         addNewProfileLabels();
         addItemDetailTextFields();
         addItemDetailLabels();
+        setLabelFonts("Helvetica Nue", newProfileLabels);
+        setLabelFonts("Helvetica Nue", itemDetailLabels);
     }
 
     public void addNewProfileTextFields() {
@@ -134,9 +137,9 @@ public class GuiElements {
         clothingSizeLabel = new JLabel("Clothing size: ");
         clothingSizeLabel.setLabelFor(clothingSize);
 
-        itemDetailJLabels.add(productLabel);
-        itemDetailJLabels.add(shoeSizeLabel);
-        itemDetailJLabels.add(clothingSizeLabel);
+        itemDetailLabels.add(productLabel);
+        itemDetailLabels.add(shoeSizeLabel);
+        itemDetailLabels.add(clothingSizeLabel);
     }
 
     public ArrayList<JTextField> getNewProfileTextFields() {
@@ -151,8 +154,8 @@ public class GuiElements {
         return itemDetailTextFields;
     }
 
-    public ArrayList<JLabel> getItemDetailJLabels() {
-        return itemDetailJLabels;
+    public ArrayList<JLabel> getItemDetailLabels() {
+        return itemDetailLabels;
     }
 
     public void resetNewProfileTextFields() {
@@ -186,6 +189,12 @@ public class GuiElements {
         }
 
         return new JLabel(new ImageIcon(mainImage));
+    }
+
+    public void setLabelFonts(String font, ArrayList<JLabel> labels) {
+        for(JLabel label: labels) {
+            label.setFont(new Font(font, label.getFont().getStyle(), label.getFont().getSize()));
+        }
     }
 
 }
