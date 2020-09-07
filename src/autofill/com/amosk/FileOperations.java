@@ -25,18 +25,18 @@ public class FileOperations {
 
             try {
                 FileWriter writer = new FileWriter(fileName);
-                writer.write(info.firstName + "\n");
-                writer.write(info.lastName + "\n");
-                writer.write(info.address1 + "\n");
-                writer.write(info.city + "\n");
-                writer.write(info.postalCode + "\n");
-                writer.write(info.province + "\n");
-                writer.write(info.email + "\n");
-                writer.write(info.phoneNumber + "\n");
-                writer.write(info.cardNumber + "\n");
-                writer.write(info.cardName + "\n");
-                writer.write(info.cardExpiration + "\n");
-                writer.write(info.cardCVV + "\n");
+                writer.write("First Name: " + info.firstName + "\n");
+                writer.write("Last Name: " + info.lastName + "\n");
+                writer.write("Address Line 1: " + info.address1 + "\n");
+                writer.write("City: " + info.city + "\n");
+                writer.write("Postal Code: " + info.postalCode + "\n");
+                writer.write("Province: " + info.province + "\n");
+                writer.write("Email: " + info.email + "\n");
+                writer.write("Phone Number: " + info.phoneNumber + "\n");
+                writer.write("Card Number: " + info.cardNumber + "\n");
+                writer.write("Card Name: " + info.cardName + "\n");
+                writer.write("Card Expiration: " + info.cardExpiration + "\n");
+                writer.write("Card CVV: " + info.cardCVV + "\n");
 
                 writer.close();
 
@@ -59,10 +59,12 @@ public class FileOperations {
                 System.err.println("No files found");
             }
 
-            for(File file: files) {
-                if(file.isFile() && file.exists()) {
-                    if(!file.getName().startsWith(".")) {
-                        profiles.add(file.getName());
+            else {
+                for(File file: files) {
+                    if(file.isFile() && file.exists()) {
+                        if(!file.getName().startsWith(".")) {
+                            profiles.add(file.getName());
+                        }
                     }
                 }
             }
@@ -78,22 +80,26 @@ public class FileOperations {
         try {
             File file = new File("/Users/amosk/Desktop/profiles/" + profile);
             Scanner scan = new Scanner(file);
-            info.firstName = scan.nextLine();
-            info.lastName = scan.nextLine();
-            info.address1 = scan.nextLine();
-            info.city = scan.nextLine();
-            info.postalCode = scan.nextLine();
-            info.province = scan.nextLine();
-            info.email = scan.nextLine();
-            info.phoneNumber = scan.nextLine();
-            info.cardNumber = scan.nextLine();
-            info.cardName = scan.nextLine();
-            info.cardExpiration = scan.nextLine();
-            info.cardCVV = scan.nextLine();
+            info.firstName = scan.nextLine().substring("First Name: ".length());
+            info.lastName = scan.nextLine().substring("Last Name: ".length());
+            info.address1 = scan.nextLine().substring("Address 1: ".length());
+            info.city = scan.nextLine().substring("City: ".length());
+            info.postalCode = scan.nextLine().substring("Postal Code: ".length());
+            info.province = scan.nextLine().substring("Province: ".length());
+            info.email = scan.nextLine().substring("Email: ".length());
+            info.phoneNumber = scan.nextLine().substring("Phone Number: ".length());
+            info.cardNumber = scan.nextLine().substring("Card Number: ".length());
+            info.cardName = scan.nextLine().substring("Card Name".length());
+            info.cardExpiration = scan.nextLine().substring("Card Expiration".length());
+            info.cardCVV = scan.nextLine().substring("Card CVV: ".length());
 
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Cannot open profile");
+        }
+
+        if(!info.isFilled(info)) {
+            return null;
         }
 
         return info;

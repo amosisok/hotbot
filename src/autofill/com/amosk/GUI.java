@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class GUI implements ActionListener {
     GuiElements guiElements = new GuiElements();
@@ -36,9 +35,7 @@ public class GUI implements ActionListener {
         optionsPanel = createOptions();
         mainPanel.add(optionsPanel, "options");
 
-        ClassLoader classLoader = getClass().getClassLoader();
-//        JLabel mainImage = guiElements.addImage(Objects.requireNonNull(classLoader.getResource("bot.jpg")).getFile());
-        JLabel mainImage = guiElements.addImage(Objects.requireNonNull(classLoader.getResource("hotbot.jpg")).getFile());
+        JLabel mainImage = new JLabel(new ImageIcon(getClass().getResource("/hotbot.jpg")));
         gbc.gridy = 0;
         homePage.add(mainImage, gbc);
 
@@ -123,22 +120,31 @@ public class GUI implements ActionListener {
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(actionEvent -> {
             ArrayList<JTextField> textFields = guiElements.getNewProfileTextFields();
-            info.profileName = textFields.get(0).getText();
-            info.firstName = textFields.get(1).getText();
-            info.lastName = textFields.get(2).getText();
-            info.address1 = textFields.get(3).getText();
-            info.city = textFields.get(4).getText();
-            info.postalCode = textFields.get(5).getText();
-            info.province = textFields.get(6).getText();
-            info.email = textFields.get(7).getText();
-            info.phoneNumber = textFields.get(8).getText();
-            info.cardNumber = textFields.get(9).getText();
-            info.cardName = textFields.get(10).getText();
-            info.cardExpiration = textFields.get(11).getText();
-            info.cardCVV = textFields.get(12).getText();
-            operations.writeToFile(info);
-            guiElements.resetNewProfileTextFields();
-            newProfile.setVisible(false);
+
+            if(guiElements.areTextFieldsEmpty(textFields)) {
+                ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
+                JOptionPane.showMessageDialog(newProfile, "Fill in all fields.", "Error"
+                        , JOptionPane.ERROR_MESSAGE, errorImage);
+            }
+
+            else {
+                info.profileName = textFields.get(0).getText();
+                info.firstName = textFields.get(1).getText();
+                info.lastName = textFields.get(2).getText();
+                info.address1 = textFields.get(3).getText();
+                info.city = textFields.get(4).getText();
+                info.postalCode = textFields.get(5).getText();
+                info.province = textFields.get(6).getText();
+                info.email = textFields.get(7).getText();
+                info.phoneNumber = textFields.get(8).getText();
+                info.cardNumber = textFields.get(9).getText();
+                info.cardName = textFields.get(10).getText();
+                info.cardExpiration = textFields.get(11).getText();
+                info.cardCVV = textFields.get(12).getText();
+                operations.writeToFile(info);
+                guiElements.resetNewProfileTextFields();
+                newProfile.setVisible(false);
+            }
         });
         gbc.gridx = 1;
         gbc.gridy = 14;
@@ -216,14 +222,33 @@ public class GUI implements ActionListener {
         JButton checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(actionEvent -> {
             ArrayList<JTextField> textFields = guiElements.getItemDetailTextFields();
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.productName = textFields.get(0).getText();
-            itemInfo.shoeSize = textFields.get(1).getText();
-            itemInfo.clothingSize = textFields.get(2).getText();
 
-            Autocheckout auto = new Autocheckout();
-            UserInfo userInfo = operations.getProfileData(profile);
-            auto.runAutocheckout(userInfo, itemInfo);
+            if(textFields.get(0).getText().isEmpty() && (textFields.get(1).getText().isEmpty()) &&
+            textFields.get(2).getText().isEmpty()) {
+                ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
+                JOptionPane.showMessageDialog(details, "Fill in product link field and at least one size.", "Error"
+                        , JOptionPane.ERROR_MESSAGE, errorImage);
+            }
+
+            else {
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.productName = textFields.get(0).getText();
+                itemInfo.shoeSize = textFields.get(1).getText();
+                itemInfo.clothingSize = textFields.get(2).getText();
+
+                Autocheckout auto = new Autocheckout();
+                UserInfo userInfo = operations.getProfileData(profile);
+
+                if(userInfo == null) {
+                    ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
+                    JOptionPane.showMessageDialog(details, "Profile is incomplete. Edit the profile or create a new one.",
+                            "Error", JOptionPane.ERROR_MESSAGE, errorImage);
+                }
+
+                else {
+                    auto.runAutocheckout(userInfo, itemInfo);
+                }
+            }
         });
         gbc.gridx = 1;
         gbc.gridy = 4;

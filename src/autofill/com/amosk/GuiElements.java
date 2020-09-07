@@ -51,8 +51,6 @@ public class GuiElements {
     JLabel shoeSizeLabel;
     JLabel clothingSizeLabel;
 
-    BufferedImage mainImage;
-
     GuiElements() {
         addNewProfileTextFields();
         addNewProfileLabels();
@@ -180,21 +178,19 @@ public class GuiElements {
         clothingSize.setText("");
     }
 
-    public JLabel addImage(String path) {
-        try {
-            mainImage = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            System.err.println("Cannot open image");
-            e.printStackTrace();
-        }
-
-        return new JLabel(new ImageIcon(mainImage));
-    }
-
     public void setLabelFonts(String font, ArrayList<JLabel> labels) {
         for(JLabel label: labels) {
             label.setFont(new Font(font, label.getFont().getStyle(), label.getFont().getSize()));
         }
+    }
+
+    public boolean areTextFieldsEmpty(ArrayList<JTextField>  textFields) {
+        for(JTextField textField: textFields) {
+            if(textField.getText().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

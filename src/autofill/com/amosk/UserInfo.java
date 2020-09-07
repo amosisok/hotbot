@@ -21,7 +21,7 @@ public class UserInfo {
         info.firstName = "";
         info.lastName = "";
         info.address1 = "";
-        info.address1 = "";
+        info.address2 = "";
         info.city = "";
         info.postalCode = "";
         info.province = "";
@@ -31,5 +31,16 @@ public class UserInfo {
         info.cardName = "";
         info.cardExpiration = "";
         info.cardCVV = "";
+    }
+
+    public boolean isFilled(UserInfo info) {
+        if(info.firstName.isEmpty() || info.lastName.isEmpty() || info.address1.isEmpty() ||
+        info.city.isEmpty() || info.postalCode.isEmpty() || info.province.isEmpty() || info.email.isEmpty()
+                || info.phoneNumber.isEmpty() || info.cardNumber.isEmpty() || info.cardName.isEmpty()
+                || info.cardExpiration.isEmpty() || info.cardCVV.isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }
