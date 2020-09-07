@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class GUI implements ActionListener {
     GuiElements guiElements = new GuiElements();
+    FileOperations operations = new FileOperations();
     JFrame frame = new JFrame("Hot Bot (Developed by Amos Ko)");
     JPanel mainPanel = new JPanel();
     JPanel homePage = new JPanel();
@@ -15,6 +16,8 @@ public class GUI implements ActionListener {
     JPanel newProfilePanel;
     JPanel existingProfilePanel;
     JPanel optionsPanel;
+    JPanel manageProfilesPanel;
+    JPanel manageProfilePanel;
     CardLayout cardLayout = new CardLayout();
     Options options = Options.getInstance();
 
@@ -29,11 +32,14 @@ public class GUI implements ActionListener {
         newProfilePanel = createNewProfile();
         mainPanel.add(newProfilePanel, "newProfile");
 
-        existingProfilePanel = getExistingProfile();
+        existingProfilePanel = getExistingProfile(1);
         mainPanel.add(existingProfilePanel, "existingProfile");
 
         optionsPanel = createOptions();
         mainPanel.add(optionsPanel, "options");
+
+        manageProfilesPanel = getExistingProfile(2);
+        mainPanel.add(manageProfilesPanel, "manageProfiles");
 
         JLabel mainImage = new JLabel(new ImageIcon(getClass().getResource("/hotbot.jpg")));
         gbc.gridy = 0;
@@ -56,15 +62,24 @@ public class GUI implements ActionListener {
         gbc.gridy = 3;
         JButton existingProfileButton = new JButton("Use existing profile");
         homePage.add(existingProfileButton, gbc);
-
         existingProfileButton.addActionListener(actionEvent -> {
             mainPanel.remove(existingProfilePanel);
-            mainPanel.add(getExistingProfile(), "existingProfile");
+            mainPanel.add(getExistingProfile(1), "existingProfile");
             cardLayout.show(mainPanel, "existingProfile");
         });
 
-        JButton optionsButton = new JButton("Options");
         gbc.gridy = 4;
+        JButton manageProfilesButton = new JButton("Manage profiles");
+        homePage.add(manageProfilesButton, gbc);
+        manageProfilesButton.addActionListener(actionEvent -> {
+            mainPanel.remove(manageProfilesPanel);
+            mainPanel.add(getExistingProfile(2), "manageProfiles");
+            cardLayout.show(mainPanel, "manageProfiles");
+        });
+
+
+        JButton optionsButton = new JButton("Options");
+        gbc.gridy = 5;
         homePage.add(optionsButton, gbc);
         optionsButton.addActionListener(actionEvent -> {
             cardLayout.show(mainPanel, "options");
@@ -84,7 +99,6 @@ public class GUI implements ActionListener {
 
     public JPanel createNewProfile() {
         UserInfo info = new UserInfo();
-        FileOperations operations = new FileOperations();
         JPanel newProfile = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -153,12 +167,12 @@ public class GUI implements ActionListener {
         return newProfile;
     }
 
-    public JPanel getExistingProfile() {
-        FileOperations operate = new FileOperations();
+    public JPanel getExistingProfile(int option) {
         JPanel existingProfile = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        ArrayList<String> profiles = operate.getProfiles("/Users/" + System.getProperty("user.name") + "/Desktop/profiles");
+        gbc.insets = new Insets(5, 5, 5, 5);
+        ArrayList<String> profiles = operations.getProfiles("/Users/" + System.getProperty("user.name") + "/Desktop/profiles");
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(actionEvent -> {
@@ -176,10 +190,19 @@ public class GUI implements ActionListener {
             existingProfile.add(button, gbc);
             gridYValue++;
             button.addActionListener(actionEvent -> {
-                itemDetails = setItemDetails(profile);
-                mainPanel.add(itemDetails, "itemDetails");
-                existingProfile.setVisible(false);
-                cardLayout.show(mainPanel, "itemDetails");
+                if(option == 1) {
+                    itemDetails = setItemDetails(profile);
+                    mainPanel.add(itemDetails, "itemDetails");
+                    existingProfile.setVisible(false);
+                    cardLayout.show(mainPanel, "itemDetails");
+                }
+
+                else if(option == 2) {
+                    manageProfilePanel = manageProfile(profile);
+                    mainPanel.add(manageProfilePanel, "existingProfile");
+                    existingProfile.setVisible(false);
+                    cardLayout.show(mainPanel, "existingProfile");
+                }
             });
         }
 
@@ -187,11 +210,15 @@ public class GUI implements ActionListener {
     }
 
     public JPanel setItemDetails(String profile) {
-        FileOperations operations = new FileOperations();
         JPanel details = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets= new Insets(10,10,10,10);
+
+        JLabel profileTitle = new JLabel(profile);
+        profileTitle.setFont(new Font("Helvetica Nue", Font.BOLD, 20));
+        gbc.gridx = 0;
+        details.add(profileTitle, gbc);
 
         int gridYValue = 0;
         for(JLabel label : guiElements.getItemDetailLabels()) {
@@ -256,6 +283,39 @@ public class GUI implements ActionListener {
         return details;
     }
 
+    public JPanel manageProfile(String profile) {
+        JPanel managedProfile = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        JLabel profileTitle = new JLabel(profile);
+        profileTitle.setFont(new Font("Helvetica Nue", Font.BOLD, 20));
+        gbc.gridy = 0;
+        managedProfile.add(profileTitle, gbc);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(actionEvent -> {
+            mainPanel.remove(manageProfilePanel);
+            existingProfilePanel = getExistingProfile(2);
+            mainPanel.add(manageProfilesPanel);
+            managedProfile.setVisible(false);
+            cardLayout.show(mainPanel, "manageProfiles");
+        });
+        gbc.gridy = 1;
+        managedProfile.add(backButton, gbc);
+
+        JButton deleteProfileButton = new JButton("Delete profile");
+        gbc.gridy = 2;
+        managedProfile.add(deleteProfileButton, gbc);
+        deleteProfileButton.addActionListener(actionEvent -> {
+            operations.deleteProfile(profile);
+            managedProfile.setVisible(false);
+            cardLayout.show(mainPanel, "homePage");
+        });
+
+        return managedProfile;
+    }
+
     public JPanel createOptions() {
         JPanel optionsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -284,6 +344,7 @@ public class GUI implements ActionListener {
 
         return optionsPanel;
     }
+
 }
 
 

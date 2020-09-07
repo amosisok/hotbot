@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileOperations {
+    String dir = "/Users/" + System.getProperty("user.name") + "/Desktop";
     public void writeToFile(UserInfo info) {
-        String dir = "/Users/" + System.getProperty("user.name") + "/Desktop";
+//        String dir = "/Users/" + System.getProperty("user.name") + "/Desktop";
         try {
             File newDir = new File(dir + "/profiles");
             boolean dirCreated = newDir.mkdir();
@@ -78,7 +79,7 @@ public class FileOperations {
     public UserInfo getProfileData(String profile) {
         UserInfo info = new UserInfo();
         try {
-            File file = new File("/Users/amosk/Desktop/profiles/" + profile);
+            File file = new File(dir + "/profiles/" + profile);
             Scanner scan = new Scanner(file);
             info.firstName = scan.nextLine().substring("First Name: ".length());
             info.lastName = scan.nextLine().substring("Last Name: ".length());
@@ -103,5 +104,19 @@ public class FileOperations {
         }
 
         return info;
+    }
+
+    public void deleteProfile(String profile) {
+        try {
+            File file = new File(dir + "/profiles/" + profile);
+
+            boolean deleted = file.delete();
+            if(!deleted) {
+                System.err.println("Cannot delete profile");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
