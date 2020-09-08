@@ -13,7 +13,7 @@ public class Autocheckout {
 
     public void runAutocheckout(UserInfo userInfo, ItemInfo itemInfo) {
 //        System.setProperty("webdriver.gecko.driver",  "/Users/amosk/Desktop/fill/geckodriver");
-        System.setProperty("webdriver.gecko.driver",  dir + "/fill/geckodriver");
+        System.setProperty("webdriver.gecko.driver",  dir + "/autocheckout/geckodriver");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setHeadless(true);

@@ -306,6 +306,12 @@ public class GUI implements ActionListener {
                             "Error", JOptionPane.ERROR_MESSAGE, errorImage);
                 }
 
+                if(!itemInfo.shoeSize.isEmpty() && !itemInfo.clothingSize.isEmpty()) {
+                    ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
+                    JOptionPane.showMessageDialog(details, "Please only fill one size field for your item.",
+                            "Error", JOptionPane.ERROR_MESSAGE, errorImage);
+                }
+
                 else {
                     auto.runAutocheckout(userInfo, itemInfo);
                 }
