@@ -22,6 +22,9 @@ public class GUI implements ActionListener {
     CardLayout cardLayout = new CardLayout();
     Options options = Options.getInstance();
 
+    private static int CHECKOUTOPTION = 1;
+    private static int EDITPROFILEOPTION = 2;
+
     GUI() {
         options.setHeadless(false);
         mainPanel.setLayout(cardLayout);
@@ -33,13 +36,13 @@ public class GUI implements ActionListener {
         newProfilePanel = createNewProfile(false, null);
         mainPanel.add(newProfilePanel, "newProfile");
 
-        existingProfilePanel = getExistingProfile(1);
+        existingProfilePanel = getExistingProfile(CHECKOUTOPTION);
         mainPanel.add(existingProfilePanel, "existingProfile");
 
         optionsPanel = createOptions();
         mainPanel.add(optionsPanel, "options");
 
-        manageProfilesPanel = getExistingProfile(2);
+        manageProfilesPanel = getExistingProfile(EDITPROFILEOPTION);
         mainPanel.add(manageProfilesPanel, "manageProfiles");
 
         JLabel mainImage = new JLabel(new ImageIcon(getClass().getResource("/hotbot.jpg")));
@@ -136,7 +139,7 @@ public class GUI implements ActionListener {
 
            else {
                 newProfile.setVisible(false);
-                cardLayout.show(mainPanel, "manageProfiles");
+                cardLayout.show(mainPanel, "existingProfile");
            }
         });
         gbc.gridx = 0;
@@ -201,37 +204,51 @@ public class GUI implements ActionListener {
         return newProfile;
     }
 
+
     public JPanel getExistingProfile(int option) {
         JPanel existingProfile = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         ArrayList<String> profiles = operations.getProfiles("/Users/" + System.getProperty("user.name") + "/Desktop/profiles");
+
+        JLabel profileTitle = new JLabel();
+        if(option == CHECKOUTOPTION) {
+            profileTitle = new JLabel("Use existing profiles");
+        }
+
+        else if(option == EDITPROFILEOPTION) {
+            profileTitle = new JLabel("Manage profiles");
+        }
+
+        profileTitle.setFont(new Font("Helvetica Nue", Font.PLAIN, 20));
+        gbc.gridy = 0;
+        existingProfile.add(profileTitle, gbc);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(actionEvent -> {
             existingProfile.setVisible(false);
             cardLayout.show(mainPanel, "homePage");
         });
-        gbc.gridx = 1;
+        gbc.gridy = 1;
         existingProfile.add(backButton, gbc);
 
-        int gridYValue = 1;
+        int gridYValue = 2;
         for(String profile: profiles) {
             JButton button = new JButton(profile);
             gbc.gridy = gridYValue;
-            gbc.gridx = 1;
+            gbc.gridx = 0;
             existingProfile.add(button, gbc);
             gridYValue++;
             button.addActionListener(actionEvent -> {
-                if(option == 1) {
+                if(option == CHECKOUTOPTION) {
                     itemDetails = setItemDetails(profile);
                     mainPanel.add(itemDetails, "itemDetails");
                     existingProfile.setVisible(false);
                     cardLayout.show(mainPanel, "itemDetails");
                 }
 
-                else if(option == 2) {
+                else if(option == EDITPROFILEOPTION) {
                     manageProfilePanel = manageProfile(profile);
                     mainPanel.add(manageProfilePanel, "existingProfile");
                     existingProfile.setVisible(false);
@@ -359,9 +376,16 @@ public class GUI implements ActionListener {
         gbc.gridy = 3;
         managedProfile.add(deleteProfileButton, gbc);
         deleteProfileButton.addActionListener(actionEvent -> {
-            operations.deleteProfile(profile);
-            managedProfile.setVisible(false);
-            cardLayout.show(mainPanel, "homePage");
+
+            int result = JOptionPane.showConfirmDialog(managedProfile, "Do you want to delete " + profile + "?",
+                    "Delete profile", JOptionPane.YES_NO_OPTION);
+
+            if(result == JOptionPane.YES_OPTION) {
+                operations.deleteProfile(profile);
+                managedProfile.setVisible(false);
+                cardLayout.show(mainPanel, "homePage");
+            }
+
         });
 
         return managedProfile;
@@ -370,24 +394,30 @@ public class GUI implements ActionListener {
     public JPanel createOptions() {
         JPanel optionsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5,5,5);
+
+        JLabel profileTitle = new JLabel("Options");
+        profileTitle.setFont(new Font("Helvetica Nue", Font.PLAIN, 20));
+        gbc.gridy = 0;
+        optionsPanel.add(profileTitle, gbc);
+
         JButton backButton = new JButton("Back");
         backButton.addActionListener(actionEvent -> {
             optionsPanel.setVisible(false);
             cardLayout.show(mainPanel, "homePage");
         });
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         optionsPanel.add(backButton, gbc);
 
         JCheckBox headless = new JCheckBox("Headless mode");
         headless.setSelected(false);
-        gbc.gridy  = 1;
+        gbc.gridy  = 2;
         optionsPanel.add(headless, gbc);
 
         headless.addActionListener(actionEvent -> {
             if(headless.isSelected()) {
                 options.setHeadless(true);
             }
-
             else {
                 options.setHeadless(false);
             }

@@ -13,7 +13,7 @@ public class Autocheckout {
 
     public void runAutocheckout(UserInfo userInfo, ItemInfo itemInfo) {
 //        System.setProperty("webdriver.gecko.driver",  "/Users/amosk/Desktop/fill/geckodriver");
-        System.setProperty("webdriver.gecko.driver",  dir + "/autocheckout/geckodriver");
+        System.setProperty("webdriver.gecko.driver",  dir + "/hotbot/geckodriver");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setHeadless(true);
@@ -115,6 +115,6 @@ public class Autocheckout {
 
         WebElement placeOrder = driver.findElement(By.xpath("//span[@class='gl-cta__content'][contains(.,'Place Order')]"));
         placeOrder.click();
-//        driver.close();
+        driver.close();
     }
 }
