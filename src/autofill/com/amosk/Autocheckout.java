@@ -9,9 +9,12 @@ import java.util.concurrent.TimeUnit;
 public class Autocheckout {
 
     Options options = Options.getInstance();
+    String dir = "/Users/" + System.getProperty("user.name") + "/Desktop";
 
     public void runAutocheckout(UserInfo userInfo, ItemInfo itemInfo) {
-        System.setProperty("webdriver.gecko.driver",  "/Users/amosk/Desktop/geckodriver");
+//        System.setProperty("webdriver.gecko.driver",  "/Users/amosk/Desktop/fill/geckodriver");
+        System.setProperty("webdriver.gecko.driver",  dir + "/fill/geckodriver");
+
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setHeadless(true);
 
