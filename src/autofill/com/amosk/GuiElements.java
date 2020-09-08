@@ -24,8 +24,8 @@ public class GuiElements {
     JTextField province = new JTextField(20);
     JTextField email = new JTextField(20);
     JTextField phone = new JTextField(20);
-    JTextField cardNumber = new JTextField(20);
     JTextField cardName = new JTextField(20);
+    JTextField cardNumber = new JTextField(20);
     JTextField cardExpiration = new JTextField(20);
     JTextField cardCVV = new JTextField(20);
 
@@ -71,8 +71,8 @@ public class GuiElements {
         newProfileTextFields.add(province);
         newProfileTextFields.add(email);
         newProfileTextFields.add(phone);
-        newProfileTextFields.add(cardNumber);
         newProfileTextFields.add(cardName);
+        newProfileTextFields.add(cardNumber);
         newProfileTextFields.add(cardExpiration);
         newProfileTextFields.add(cardCVV);
     }
@@ -96,10 +96,10 @@ public class GuiElements {
         emailLabel.setLabelFor(email);
         phoneLabel = new JLabel("Phone number: ");
         phoneLabel.setLabelFor(phone);
-        cardNumberLabel = new JLabel("Card number: ");
-        cardNumberLabel.setLabelFor(cardNumber);
         cardNameLabel = new JLabel("Name on card: ");
         cardNameLabel.setLabelFor(cardName);
+        cardNumberLabel = new JLabel("Card number: ");
+        cardNumberLabel.setLabelFor(cardNumber);
         cardExpirationLabel = new JLabel("Expiration date (MM/YY): ");
         cardExpirationLabel.setLabelFor(cardExpiration);
         cardCCVLabel = new JLabel("CVV: ");
@@ -114,8 +114,8 @@ public class GuiElements {
         newProfileLabels.add(provinceLabel);
         newProfileLabels.add(emailLabel);
         newProfileLabels.add(phoneLabel);
-        newProfileLabels.add(cardNumberLabel);
         newProfileLabels.add(cardNameLabel);
+        newProfileLabels.add(cardNumberLabel);
         newProfileLabels.add(cardExpirationLabel);
         newProfileLabels.add(cardCCVLabel);
 

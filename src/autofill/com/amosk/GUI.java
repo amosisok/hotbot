@@ -18,6 +18,7 @@ public class GUI implements ActionListener {
     JPanel optionsPanel;
     JPanel manageProfilesPanel;
     JPanel manageProfilePanel;
+    JPanel editProfilePanel;
     CardLayout cardLayout = new CardLayout();
     Options options = Options.getInstance();
 
@@ -29,7 +30,7 @@ public class GUI implements ActionListener {
         gbc.insets = new Insets(10,10,10,10);
         mainPanel.add(homePage, "homePage");
 
-        newProfilePanel = createNewProfile();
+        newProfilePanel = createNewProfile(false, null);
         mainPanel.add(newProfilePanel, "newProfile");
 
         existingProfilePanel = getExistingProfile(1);
@@ -56,6 +57,9 @@ public class GUI implements ActionListener {
         homePage.add(newProfileButton, gbc);
 
         newProfileButton.addActionListener(actionEvent -> {
+            mainPanel.remove(newProfilePanel);
+            newProfilePanel = createNewProfile(false, null);
+            mainPanel.add(newProfilePanel, "newProfile");
             cardLayout.show(mainPanel, "newProfile");
         });
 
@@ -97,12 +101,13 @@ public class GUI implements ActionListener {
 
     }
 
-    public JPanel createNewProfile() {
+    public JPanel createNewProfile(boolean editProfile, UserInfo profileToEdit) {
         UserInfo info = new UserInfo();
         JPanel newProfile = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets= new Insets(10,10,10,10);
+        ArrayList<JTextField> textFields = guiElements.getNewProfileTextFields();
 
         int gridYValue = 0;
         for(JLabel label: guiElements.getNewProfileLabels()) {
@@ -122,19 +127,45 @@ public class GUI implements ActionListener {
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(actionEvent -> {
-            guiElements.resetNewProfileTextFields();
-            info.resetInfo(info);
-            newProfile.setVisible(false);
-            cardLayout.show(mainPanel, "homePage");
+           if(!editProfile) {
+               guiElements.resetNewProfileTextFields();
+               info.resetInfo(info);
+               newProfile.setVisible(false);
+               cardLayout.show(mainPanel, "homePage");
+           }
+
+           else {
+                newProfile.setVisible(false);
+                cardLayout.show(mainPanel, "manageProfiles");
+           }
         });
         gbc.gridx = 0;
         gbc.gridy = 14;
         newProfile.add(backButton, gbc);
 
+        if(!editProfile && profileToEdit == null) {
+            guiElements.resetNewProfileTextFields();
+        }
+
+        else if(editProfile && profileToEdit != null) {
+            textFields.get(0).setText(profileToEdit.profileName);
+            textFields.get(1).setText(profileToEdit.firstName);
+            textFields.get(2).setText(profileToEdit.lastName);
+            textFields.get(3).setText(profileToEdit.address1);
+            textFields.get(4).setText(profileToEdit.city);
+            textFields.get(5).setText(profileToEdit.postalCode);
+            textFields.get(6).setText(profileToEdit.province);
+            textFields.get(7).setText(profileToEdit.email);
+            textFields.get(8).setText(profileToEdit.phoneNumber);
+            textFields.get(9).setText(profileToEdit.cardName);
+            textFields.get(10).setText(profileToEdit.cardNumber);
+            textFields.get(11).setText(profileToEdit.cardExpiration);
+            textFields.get(12).setText(profileToEdit.cardCVV);
+        }
+
+
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(actionEvent -> {
-            ArrayList<JTextField> textFields = guiElements.getNewProfileTextFields();
-
             if(guiElements.areTextFieldsEmpty(textFields)) {
                 ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
                 JOptionPane.showMessageDialog(newProfile, "Fill in all fields.", "Error"
@@ -151,19 +182,22 @@ public class GUI implements ActionListener {
                 info.province = textFields.get(6).getText();
                 info.email = textFields.get(7).getText();
                 info.phoneNumber = textFields.get(8).getText();
-                info.cardNumber = textFields.get(9).getText();
-                info.cardName = textFields.get(10).getText();
+                info.cardName = textFields.get(9).getText();
+                info.cardNumber = textFields.get(10).getText();
                 info.cardExpiration = textFields.get(11).getText();
                 info.cardCVV = textFields.get(12).getText();
                 operations.writeToFile(info);
                 guiElements.resetNewProfileTextFields();
                 newProfile.setVisible(false);
+
+                if(editProfile) {
+                    cardLayout.show(mainPanel, "existingProfile");
+                }
             }
         });
         gbc.gridx = 1;
         gbc.gridy = 14;
         newProfile.add(saveButton, gbc);
-
         return newProfile;
     }
 
@@ -304,8 +338,19 @@ public class GUI implements ActionListener {
         gbc.gridy = 1;
         managedProfile.add(backButton, gbc);
 
-        JButton deleteProfileButton = new JButton("Delete profile");
+        JButton editProfileButton = new JButton("Edit profile");
         gbc.gridy = 2;
+        managedProfile.add(editProfileButton, gbc);
+        editProfileButton.addActionListener(actionEvent -> {
+            UserInfo userInfo = operations.getProfileData(profile);
+            editProfilePanel = createNewProfile(true, userInfo);
+            mainPanel.add(editProfilePanel, "editProfile");
+            managedProfile.setVisible(false);
+            cardLayout.show(mainPanel, "editProfile");
+        });
+
+        JButton deleteProfileButton = new JButton("Delete profile");
+        gbc.gridy = 3;
         managedProfile.add(deleteProfileButton, gbc);
         deleteProfileButton.addActionListener(actionEvent -> {
             operations.deleteProfile(profile);

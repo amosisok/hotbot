@@ -34,8 +34,8 @@ public class FileOperations {
                 writer.write("Province: " + info.province + "\n");
                 writer.write("Email: " + info.email + "\n");
                 writer.write("Phone Number: " + info.phoneNumber + "\n");
-                writer.write("Card Number: " + info.cardNumber + "\n");
                 writer.write("Card Name: " + info.cardName + "\n");
+                writer.write("Card Number: " + info.cardNumber + "\n");
                 writer.write("Card Expiration: " + info.cardExpiration + "\n");
                 writer.write("Card CVV: " + info.cardCVV + "\n");
 
@@ -81,17 +81,18 @@ public class FileOperations {
         try {
             File file = new File(dir + "/profiles/" + profile);
             Scanner scan = new Scanner(file);
+            info.profileName = profile;
             info.firstName = scan.nextLine().substring("First Name: ".length());
             info.lastName = scan.nextLine().substring("Last Name: ".length());
-            info.address1 = scan.nextLine().substring("Address 1: ".length());
+            info.address1 = scan.nextLine().substring("Address Line 1: ".length());
             info.city = scan.nextLine().substring("City: ".length());
             info.postalCode = scan.nextLine().substring("Postal Code: ".length());
             info.province = scan.nextLine().substring("Province: ".length());
             info.email = scan.nextLine().substring("Email: ".length());
             info.phoneNumber = scan.nextLine().substring("Phone Number: ".length());
+            info.cardName = scan.nextLine().substring("Card Name: ".length());
             info.cardNumber = scan.nextLine().substring("Card Number: ".length());
-            info.cardName = scan.nextLine().substring("Card Name".length());
-            info.cardExpiration = scan.nextLine().substring("Card Expiration".length());
+            info.cardExpiration = scan.nextLine().substring("Card Expiration: ".length());
             info.cardCVV = scan.nextLine().substring("Card CVV: ".length());
 
         } catch (Exception e) {
