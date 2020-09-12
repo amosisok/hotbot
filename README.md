@@ -7,5 +7,10 @@ How to run:<br>
 2. The jar file to execute should be in out->artifacts->hotbot_jar, called hotbot.jar. Clicking on it should run the program. <br>
 If not, open terminal and enter "java -jar hotbot.jar". This should open the application. Ensure you are in the correct directory.
 
+<p float = "left">
+<img src="https://github.com/amosisok/hotbot/blob/master/Screen%20Shot%202020-09-11%20at%208.45.28%20PM.png" width="325" height="500"> 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </p>
+
 Supported sites: adidas.ca <br>
 Supported platforms: macOS
