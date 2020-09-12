@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class GUI implements ActionListener {
     GuiElements guiElements = new GuiElements();
     FileOperations operations = new FileOperations();
+    Image applicationImage = new ImageIcon(getClass().getResource("/hotbot.jpg")).getImage();
     JFrame frame = new JFrame("Hot Bot (Developed by Amos Ko)");
     JPanel mainPanel = new JPanel();
     JPanel homePage = new JPanel();
@@ -189,13 +190,24 @@ public class GUI implements ActionListener {
                 info.cardNumber = textFields.get(10).getText();
                 info.cardExpiration = textFields.get(11).getText();
                 info.cardCVV = textFields.get(12).getText();
-                operations.writeToFile(info);
-                guiElements.resetNewProfileTextFields();
-                newProfile.setVisible(false);
 
-                if(editProfile) {
-                    cardLayout.show(mainPanel, "existingProfile");
+                if(!guiElements.isNumber(info.phoneNumber) || !guiElements.isNumber(info.cardNumber) ||
+                        !guiElements.isNumber(info.cardCVV)) {
+                    ImageIcon errorImage =  new ImageIcon(getClass().getResource("/error1.png"));
+                    JOptionPane.showMessageDialog(newProfile, "Please fix highlighted fields.", "Error"
+                            , JOptionPane.ERROR_MESSAGE, errorImage);
                 }
+
+                else {
+                    operations.writeToFile(info);
+                    guiElements.resetNewProfileTextFields();
+                    newProfile.setVisible(false);
+
+                    if(editProfile) {
+                        cardLayout.show(mainPanel, "existingProfile");
+                    }
+                }
+
             }
         });
         gbc.gridx = 1;

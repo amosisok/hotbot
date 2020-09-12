@@ -2,6 +2,7 @@ package autofill.com.amosk;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -61,7 +62,6 @@ public class GuiElements {
     }
 
     public void addNewProfileTextFields() {
-
         newProfileTextFields.add(profileName);
         newProfileTextFields.add(firstName);
         newProfileTextFields.add(lastName);
@@ -70,10 +70,13 @@ public class GuiElements {
         newProfileTextFields.add(postalCode);
         newProfileTextFields.add(province);
         newProfileTextFields.add(email);
+        phone.setInputVerifier(new VerifyInput());
         newProfileTextFields.add(phone);
         newProfileTextFields.add(cardName);
+        cardNumber.setInputVerifier(new VerifyInput());
         newProfileTextFields.add(cardNumber);
         newProfileTextFields.add(cardExpiration);
+        cardCVV.setInputVerifier(new VerifyInput());
         newProfileTextFields.add(cardCVV);
     }
 
@@ -191,6 +194,16 @@ public class GuiElements {
             }
         }
         return false;
+    }
+
+    public boolean isNumber(String s) {
+        try {
+            long num =  Long.parseLong(s);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 }
