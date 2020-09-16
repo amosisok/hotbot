@@ -9,7 +9,7 @@ public class VerifyInput extends InputVerifier {
     public boolean verify(JComponent input) {
         String text = ((JTextField) input).getText();
         try {
-            int num = Integer.parseInt(text);
+            long num = Long.parseLong(text);
         } catch (NumberFormatException e) {
             input.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
             return false;

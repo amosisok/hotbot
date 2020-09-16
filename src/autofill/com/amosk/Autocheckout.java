@@ -6,6 +6,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import java.util.concurrent.TimeUnit;
 
+//https://www.vancityoriginal.com/1996-retro-nuptse-jacket-black/
+
 public class Autocheckout {
 
     Options options = Options.getInstance();
@@ -36,6 +38,16 @@ public class Autocheckout {
 
         catch (NoAlertPresentException e) {}
 
+        if(link.contains("adidas")) {
+            adidas(driver, userInfo, itemInfo);
+        }
+
+        else if(link.contains("vancityoriginal")) {
+            vancityOriginal(driver, userInfo, itemInfo);
+        }
+    }
+
+    public void adidas(WebDriver driver, UserInfo userInfo, ItemInfo itemInfo) {
         Actions action = new Actions(driver);
         action.sendKeys(Keys.SPACE).perform();
 
@@ -56,16 +68,12 @@ public class Autocheckout {
 
 //        JavascriptExecutor jse = (JavascriptExecutor)driver;
 
-        WebElement cart = driver.findElement(By.xpath("(//span[@class='gl-cta__content'][contains(.,'Add To Bag')])[2]"));
+        WebElement cart = driver.findElement(By.xpath("//span[contains(.,'Add To Bag')]"));
 //        jse.executeScript("arguments[0].scrollIntoView();", cart);
 
         cart.click();
 
-        WebElement checkOut = driver.findElement(By.xpath("//span[@class='gl-cta__content'][contains(.,'Checkout')]"));
-        checkOut.click();
-
-        driver.manage().timeouts().implicitlyWait(2500, TimeUnit.MILLISECONDS);
-
+        driver.get("https://www.adidas.ca/en/delivery");
 
         WebElement firstName = driver.findElement(By.name("firstName"));
         firstName.sendKeys(userInfo.firstName);
@@ -116,5 +124,43 @@ public class Autocheckout {
         WebElement placeOrder = driver.findElement(By.xpath("//span[@class='gl-cta__content'][contains(.,'Place Order')]"));
         placeOrder.click();
         driver.close();
+    }
+
+    public void vancityOriginal(WebDriver driver, UserInfo userInfo, ItemInfo itemInfo) {
+//        WebElement size = driver.findElement(By.xpath("//label[@class='form-option'][contains(.,'Medium')]"));
+
+        WebElement item;
+        if(!itemInfo.shoeSize.isEmpty()) {
+            item = driver.findElement(By.xpath("//label[@class='form-option'][contains(.,'" + itemInfo.shoeSize + "')]"));
+        }
+
+        else {
+            String itemSize = convertSizeVancity(itemInfo.clothingSize);
+            item = driver.findElement(By.xpath("//label[@class='form-option'][contains(.,'" + itemSize + "')]"));
+        }
+        item.click();
+
+        WebElement cart = driver.findElement(By.xpath("//input[contains(@value,'Add to Cart')]"));
+        cart.click();
+
+//        driver.get("https://www.vancityoriginal.com/checkout.php");
+
+//        WebElement checkout = driver.findElement(By.xpath("//a[contains(.,'Proceed to checkout')]"));
+//        checkout.click();
+    }
+
+    public String convertSizeVancity(String s) {
+        if(s.contains("S") || s.contains("s") || s.contains("small")) {
+            s = "Small";
+        }
+
+        else if(s.contains("M") || s.contains("m") || s.contains("medium")) {
+            s = "Medium";
+        }
+
+        else if(s.contains("L") || s.contains("l") || s.contains("large")) {
+            s = "Large";
+        }
+        return s;
     }
 }

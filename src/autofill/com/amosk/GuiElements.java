@@ -198,7 +198,7 @@ public class GuiElements {
 
     public boolean isNumber(String s) {
         try {
-            long num =  Long.parseLong(s);
+            Long num =  Long.parseLong(s);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return false;
