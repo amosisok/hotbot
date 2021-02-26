@@ -12,5 +12,6 @@ If not, open terminal and enter "java -jar hotbot.jar". This should open the app
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </p>
 
+In the future, will be deployed as a full-stack web application.
 Supported sites: adidas.ca <br>
 Supported platforms: macOS
